@@ -5,11 +5,24 @@ import { createCard, deleteCard, addLike } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 
 
-// добавление карточек
+// добавление карточек и увеличение картинок
 const container = document.querySelector('.content');
 const cardTemplate = document.querySelector('#card-template').content;
 const placesList = container.querySelector('.places__list');
 
+const popupCard = document.querySelector('.popup_type_image');
+const zoomImage = popupCard.querySelector('.popup__image');
+const captionImage = popupCard.querySelector('.popup__caption');
+const popupCardClose =popupCard.querySelector('.popup__close');
+
+const increaseCard = (name, link
+  ) => {
+  openPopup(popupCard);
+  zoomImage.setAttribute('src', link);
+  zoomImage.setAttribute('alt', name);
+  captionImage.textContent = name;
+};
+popupCardClose.addEventListener('click', () => {closePopup(popupCard)});
 
 cards.forEach(item => {
     placesList.append(createCard(cardTemplate, item.link, item.name, deleteCard, addLike, increaseCard))
@@ -63,28 +76,4 @@ popupNewCardOpen.addEventListener('click', () => {
 popupNewCardClose.addEventListener('click', () => {
   closePopup(popupNewCard)
 });
-formCard.addEventListener('submit', handleFormAddCardSubmit); 
-
-const popupCard = document.querySelector('.popup_type_image');
-const zoomImage = popupCard.querySelector('.popup__image');
-const captionImage = popupCard.querySelector('.popup__caption');
-const increaseCard = event => {
-  openPopup(popupCard);
-  zoomImage.setAttribute('src', event.target.src);
-  zoomImage.setAttribute('alt', event.target.alt);
-  captionImage.textContent = event.target.alt;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
+formCard.addEventListener('submit', handleFormAddCardSubmit);
