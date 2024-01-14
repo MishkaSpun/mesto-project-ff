@@ -35,9 +35,13 @@ const popupProfileEditClose = popupProfileEdit.querySelector('.popup__close');
 const formEdit = document.querySelector('form[name="edit-profile"]');
 const nameInput = formEdit.querySelector('.popup__input_type_name');
 const jobInput = formEdit.querySelector('.popup__input_type_description');
+const profileName = document.querySelector('.profile__title');
+const profileJob = document.querySelector('.profile__description');
 
 popupProfileEditOpen.addEventListener('click', () => {
     openPopup(popupProfileEdit);
+    nameInput.value = profileName.textContent;
+    jobInput.value = profileJob.textContent;
   });
 popupProfileEditClose.addEventListener('click', () => {
     closePopup(popupProfileEdit)

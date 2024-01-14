@@ -1,12 +1,14 @@
 //.popup_is-opened 
 const openPopup = (popup) => {
     popup.classList.add('popup_is-opened');
+    popup.addEventListener('mousedown', closeOverlay);
+    document.addEventListener('keydown', closeKeydown)
 };
 
 const closePopup = (popup) => {
     popup.classList.remove('popup_is-opened');
-    popup.addEventListener('mousedown', closeOverlay);
-    popup.addEventListener('keydown', closeKeydown)
+    popup.removeEventListener('mousedown', closeOverlay);
+    document.removeEventListener('keydown', closeKeydown)
 };
 
 const closeOverlay = (event) => {
