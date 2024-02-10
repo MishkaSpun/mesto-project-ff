@@ -3,7 +3,7 @@ import '../src/index.css';
 import { cards} from './components/cards.js';
 import { createCard, deleteCard, addLike } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
-
+import {enableValidation, clearValidation, validationConfig} from './components/validation.js';
 
 // добавление карточек и увеличение картинок
 const container = document.querySelector('.content');
@@ -28,6 +28,7 @@ cards.forEach(item => {
     placesList.append(createCard(cardTemplate, item.link, item.name, deleteCard, addLike, increaseCard))
   });
 
+ 
 // работа с модальным окном редактирования профиля
 const popupProfileEdit = document.querySelector('.popup_type_edit');
 const popupProfileEditOpen = document.querySelector('.profile__edit-button');
@@ -39,6 +40,7 @@ const profileName = document.querySelector('.profile__title');
 const profileJob = document.querySelector('.profile__description');
 
 popupProfileEditOpen.addEventListener('click', () => {
+    clearValidation(formEdit, validationConfig);
     openPopup(popupProfileEdit);
     nameInput.value = profileName.textContent;
     jobInput.value = profileJob.textContent;
@@ -57,7 +59,7 @@ const handleFormEditProfileSubmit = (evt) => {
     closePopup(popupProfileEdit)
 };
 formEdit.addEventListener('submit', handleFormEditProfileSubmit);
-
+ 
 //работа с модальным окном добавления карточки
 const popupNewCard = document.querySelector('.popup_type_new-card');
 const popupNewCardOpen = document.querySelector('.profile__add-button');
@@ -65,6 +67,7 @@ const popupNewCardClose = popupNewCard.querySelector('.popup__close');
 const formCard = document.querySelector('form[name="new-place"]');
 const placeInput = formCard.querySelector('.popup__input_type_card-name');
 const linkInput = formCard.querySelector('.popup__input_type_url');
+
 const handleFormAddCardSubmit = (evt) => {
   evt.preventDefault();
   const place = placeInput.value;
@@ -76,8 +79,12 @@ const handleFormAddCardSubmit = (evt) => {
 }; 
 popupNewCardOpen.addEventListener('click', () => {
   openPopup(popupNewCard);
+  clearValidation(formCard, validationConfig);
 });
 popupNewCardClose.addEventListener('click', () => {
   closePopup(popupNewCard)
 });
 formCard.addEventListener('submit', handleFormAddCardSubmit);
+
+//валидация
+enableValidation(validationConfig); 
