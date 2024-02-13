@@ -52,6 +52,7 @@ const profileName = document.querySelector('.profile__title');
 const profileJob = document.querySelector('.profile__description');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
+const profileFormSubmitButton = formEdit.querySelector('.popup__button');
 
 popupProfileEditOpen.addEventListener('click', () => {
     clearValidation(formEdit, validationConfig);
@@ -64,6 +65,10 @@ popupProfileEditClose.addEventListener('click', () => {
   });
 const handleFormEditProfileSubmit = (evt) => {
     evt.preventDefault();
+    loading({
+      buttonElement: profileFormSubmitButton,
+      isLoading: true,
+    });
     patchUserInfo(nameInput,jobInput)
     .then((res) => {
       profileTitle.textContent = res.name;
@@ -82,6 +87,8 @@ const popupAvatarEditOpen = document.querySelector('.profile__image_cover');
 const popupAvatarEditClose = popupAvatarEdit.querySelector('.popup__close');
 const formAvatar = document.querySelector('form[name="newAvatar"]');
 const avatarLinkInput = formAvatar.querySelector('.popup__input_type_url');
+const avatarFormSubmitButton = formAvatar.querySelector('.popup__button');
+
 popupAvatarEditOpen.addEventListener('click', () => {
   clearValidation(formEdit, validationConfig);
   openPopup(popupAvatarEdit);
@@ -92,6 +99,10 @@ popupAvatarEditClose.addEventListener('click', () => {
 });
 const handleFormEditAvatarSubmit = (evt) => {
   evt.preventDefault();
+  loading({
+    buttonElement: avatarFormSubmitButton,
+    isLoading: true,
+  });
   const linkValue = avatarLinkInput.value;
   avatar.style.backgroundImage = linkValue;
   patchAvatar(linkValue)
@@ -111,9 +122,14 @@ const popupNewCardClose = popupNewCard.querySelector('.popup__close');
 const formCard = document.querySelector('form[name="new-place"]');
 const placeInput = formCard.querySelector('.popup__input_type_card-name');
 const linkInput = formCard.querySelector('.popup__input_type_url');
+const cardFormSubmitButton = formCard.querySelector('.popup__button');
 
 const handleFormAddCardSubmit = (evt) => {
   evt.preventDefault();
+  loading({
+    buttonElement: cardFormSubmitButton,
+    isLoading: true,
+  });
   const place = placeInput.value;
   const placeLink = linkInput.value;
   postNewCard(place, placeLink)
@@ -135,13 +151,23 @@ popupNewCardClose.addEventListener('click', () => {
 });
 formCard.addEventListener('submit', handleFormAddCardSubmit);
 
+//лоадер
+
+const loading = ({ buttonElement, isLoading }) => {
+  if (isLoading) {
+    buttonElement.textContent = 'Сохранение...';
+  } else {
+    buttonElement.textContent = 'Сохранить';
+  }
+};
+
 //валидация
 enableValidation(validationConfig); 
 
 getUserInfo().then((data) =>{
   profileDescription.textContent = data.about;
   profileTitle.textContent = data.name;
-
+  avatar.style = `background-image: url('${data.avatar}')`;
 }
 )
 

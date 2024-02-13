@@ -158,22 +158,5 @@ export {getCard, getUserInfo, deleteOwnCard, putLike, deleteLike, patchUserInfo,
 /*
 - валидация
 - разобраться почему сердечко не остается выбранным при перезагрузке  (странная фигня, которая то появляется, то пропадает. Возможно проблема ос скоростью действия)
-- верстка лайков, чтобы не прыгало
-
- const linkValue = profileLinkInput.value;
-  profileImage.style.backgroundImage = linkValue;
-  showLoadingBtn(true, profilePopup.querySelector(".popup__button"));
-  profileSaveButton.disabled = true;
-  updateNewAvatar(linkValue)
-    .then((res) => {
-      profileImage.style.backgroundImage = `url('${res.avatar}')`;
-      closeModal(profilePopup);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      profileForm.reset();
-      showLoadingBtn(false, profileForm.querySelector(".popup__button"));
-    });
+- верстка лайков, чтобы не 
 */
