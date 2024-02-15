@@ -15,6 +15,19 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 };
 
+//загрузка информации с сервера
+let userId
+Promise.all([getCard(), getUserInfo()])
+.then (([listCard, userData]) => {
+  listCard.forEach((element) => {
+    profileDescription.textContent = userData.about;
+    profileTitle.textContent = userData.name;
+    avatar.style = `background-image: url('${userData.avatar}')`;
+    userId = userData._id;
+    placesList.append(createCard(cardTemplate, element, deleteCard, addLike, increaseCard, userId))
+  });
+});
+
 // добавление карточек и увеличение картинок
 const container = document.querySelector('.content');
 const cardTemplate = document.querySelector('#card-template').content;
@@ -33,17 +46,6 @@ const increaseCard = (name, link
   captionImage.textContent = name;
 };
 popupCardClose.addEventListener('click', () => {closePopup(popupCard)});
-
-// profileDescription.textContent = data.about;
-// profileTitle.textContent = data.name;
-// avatar.style = `background-image: url('${data.avatar}')`;
-// let userID = ;
-Promise.all([getCard(), getUserInfo()])
-.then (([listCard, userData]) => {
-  listCard.forEach((element) => {
-    placesList.append(createCard(cardTemplate, element, deleteCard, addLike, increaseCard))
-  });
-})
 
 // работа с модальным окном редактирования профиля
 const popupProfileEdit = document.querySelector('.popup_type_edit');
@@ -70,7 +72,7 @@ popupProfileEditClose.addEventListener('click', () => {
 const handleFormEditProfileSubmit = (evt) => {
     evt.preventDefault();
     loading(true, profileFormSubmitButton);
-    patchUserInfo(nameInput,jobInput)
+    patchUserInfo(nameInput.value, jobInput.value)
     .then((res) => {
       profileTitle.textContent = res.name;
       profileDescription.textContent = res.about;
@@ -173,10 +175,6 @@ const loading = (isLoading, button) => {
 //валидация
 enableValidation(validationConfig); 
 
-// getUserInfo().then((data) =>{
-//   profileDescription.textContent = data.about;
-//   profileTitle.textContent = data.name;
-//   avatar.style = `background-image: url('${data.avatar}')`;
 
 
 
