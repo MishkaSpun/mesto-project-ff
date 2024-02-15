@@ -1,4 +1,7 @@
-
+// const disableSubmitButton = (button, config) => {
+//   button.disabled = true;
+//   config.inactiveButtonClass
+// };
 const showInputError = (formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.add('popup__input_type_error');
@@ -16,9 +19,7 @@ const showInputError = (formElement, inputElement, errorMessage) => {
   const checkInputValidity = (formElement, inputElement) => {
     if (inputElement.validity.patternMismatch) {
       inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-    } else if (inputElement.validity.valueMissing) {
-      inputElement.setCustomValidity('Вы пропустили это поле.');
-    } else {
+    }  else {
       inputElement.setCustomValidity('');
     }
     
@@ -27,7 +28,7 @@ const showInputError = (formElement, inputElement, errorMessage) => {
     } else {
       hideInputError(formElement, inputElement);
     }
-  };
+  }; //проверить
 
   const setEventListeners = (formElement) => {
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
@@ -74,8 +75,11 @@ const showInputError = (formElement, inputElement, errorMessage) => {
     inputList.forEach((input) => {
       hideInputError(formElement, input);
     });
-  
+    submitButtonElement.disabled = true;
     submitButtonElement.classList.add(config.inactiveButtonClass)
   };
 
   export {enableValidation, clearValidation};
+
+
+ 

@@ -34,8 +34,12 @@ const increaseCard = (name, link
 };
 popupCardClose.addEventListener('click', () => {closePopup(popupCard)});
 
+// profileDescription.textContent = data.about;
+// profileTitle.textContent = data.name;
+// avatar.style = `background-image: url('${data.avatar}')`;
+// let userID = ;
 Promise.all([getCard(), getUserInfo()])
-.then (([listCard, users]) => {
+.then (([listCard, userData]) => {
   listCard.forEach((element) => {
     placesList.append(createCard(cardTemplate, element, deleteCard, addLike, increaseCard))
   });
@@ -65,17 +69,21 @@ popupProfileEditClose.addEventListener('click', () => {
   });
 const handleFormEditProfileSubmit = (evt) => {
     evt.preventDefault();
-    loading({
-      buttonElement: profileFormSubmitButton,
-      isLoading: true,
-    });
+    loading(true, profileFormSubmitButton);
     patchUserInfo(nameInput,jobInput)
     .then((res) => {
       profileTitle.textContent = res.name;
       profileDescription.textContent = res.about;
+      closePopup(popupProfileEdit);
+      formEdit.reset();
     })
-    closePopup(popupProfileEdit);
-    formEdit.reset();
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading(false, profileFormSubmitButton);
+    });
+    
 };
 
 formEdit.addEventListener('submit', handleFormEditProfileSubmit);
@@ -99,16 +107,20 @@ popupAvatarEditClose.addEventListener('click', () => {
 });
 const handleFormEditAvatarSubmit = (evt) => {
   evt.preventDefault();
-  loading({
-    buttonElement: avatarFormSubmitButton,
-    isLoading: true,
-  });
+  loading(true, avatarFormSubmitButton
+  );
   const linkValue = avatarLinkInput.value;
   avatar.style.backgroundImage = linkValue;
   patchAvatar(linkValue)
   .then((res)=> {
     avatar.style.backgroundImage = `url('${res.avatar}')`;
     closePopup(popupAvatarEdit);})
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading(false, avatarFormSubmitButton);
+    });
 };
 
 popupAvatarEdit.addEventListener('submit', handleFormEditAvatarSubmit);
@@ -126,10 +138,7 @@ const cardFormSubmitButton = formCard.querySelector('.popup__button');
 
 const handleFormAddCardSubmit = (evt) => {
   evt.preventDefault();
-  loading({
-    buttonElement: cardFormSubmitButton,
-    isLoading: true,
-  });
+  loading(true, cardFormSubmitButton);
   const place = placeInput.value;
   const placeLink = linkInput.value;
   postNewCard(place, placeLink)
@@ -140,7 +149,11 @@ const handleFormAddCardSubmit = (evt) => {
     formCard.reset();
   })
   .catch((error) => {
-    console.log(error)})
+    console.log(error);
+  })
+  .finally(() => {
+    loading(false, cardFormSubmitButton);
+  });
 }; 
 popupNewCardOpen.addEventListener('click', () => {
   openPopup(popupNewCard);
@@ -153,21 +166,17 @@ formCard.addEventListener('submit', handleFormAddCardSubmit);
 
 //лоадер
 
-const loading = ({ buttonElement, isLoading }) => {
-  if (isLoading) {
-    buttonElement.textContent = 'Сохранение...';
-  } else {
-    buttonElement.textContent = 'Сохранить';
-  }
+const loading = (isLoading, button) => {
+  button.textContent = isLoading ? "Сохранение..." : "Сохранить";
 };
 
 //валидация
 enableValidation(validationConfig); 
 
-getUserInfo().then((data) =>{
-  profileDescription.textContent = data.about;
-  profileTitle.textContent = data.name;
-  avatar.style = `background-image: url('${data.avatar}')`;
-}
-)
+// getUserInfo().then((data) =>{
+//   profileDescription.textContent = data.about;
+//   profileTitle.textContent = data.name;
+//   avatar.style = `background-image: url('${data.avatar}')`;
+
+
 
