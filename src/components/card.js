@@ -32,9 +32,13 @@ const createCard = (template, data, deleteClick, likeClick, showClick, userId) =
   };
 
   const deleteCard = (event, id) => {
-    deleteOwnCard(id).then(()=> {
-    event.target.closest('.places__item').remove();
-  })
+    deleteOwnCard(id)
+    .then(()=> {
+      event.target.closest('.places__item').remove();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   };
 
   const addLike = (evt, id, count) => {

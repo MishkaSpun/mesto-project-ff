@@ -1,6 +1,5 @@
 //все импорты
 import '../src/index.css';
-import { cards} from './components/cards.js';
 import { createCard, deleteCard, addLike } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
@@ -18,15 +17,18 @@ const validationConfig = {
 //загрузка информации с сервера
 let userId
 Promise.all([getCard(), getUserInfo()])
-.then (([listCard, userData]) => {
-  listCard.forEach((element) => {
+  .then (([listCard, userData]) => {
+    listCard.forEach((element) => {
     profileDescription.textContent = userData.about;
     profileTitle.textContent = userData.name;
     avatar.style = `background-image: url('${userData.avatar}')`;
     userId = userData._id;
     placesList.append(createCard(cardTemplate, element, deleteCard, addLike, increaseCard, userId))
+    });
+  })
+  .catch((error) => {
+    console.error(error);
   });
-});
 
 // добавление карточек и увеличение картинок
 const container = document.querySelector('.content');
@@ -117,18 +119,16 @@ const handleFormEditAvatarSubmit = (evt) => {
   .then((res)=> {
     avatar.style.backgroundImage = `url('${res.avatar}')`;
     closePopup(popupAvatarEdit);})
-    .catch((error) => {
+  .catch((error) => {
       console.log(error);
-    })
-    .finally(() => {
+  })
+  .finally(() => {
       loading(false, avatarFormSubmitButton);
-    });
+  });
 };
 
 popupAvatarEdit.addEventListener('submit', handleFormEditAvatarSubmit);
 
-
- 
 //работа с модальным окном добавления карточки
 const popupNewCard = document.querySelector('.popup_type_new-card');
 const popupNewCardOpen = document.querySelector('.profile__add-button');
@@ -145,7 +145,7 @@ const handleFormAddCardSubmit = (evt) => {
   const placeLink = linkInput.value;
   postNewCard(place, placeLink)
   .then((elem) => {
-    const addNewCard = createCard(cardTemplate, elem, getCard, deleteCard, addLike, increaseCard);
+    const addNewCard = createCard(cardTemplate, elem, getCard, deleteCard, addLike, increaseCard, userId);
     placesList.prepend(addNewCard);
     closePopup(popupNewCard);
     formCard.reset();
